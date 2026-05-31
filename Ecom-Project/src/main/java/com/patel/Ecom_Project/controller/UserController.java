@@ -6,6 +6,9 @@ import com.patel.Ecom_Project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin("*")
@@ -23,13 +26,40 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Users user){
-        Users validUser=service.verifyUser(user.getUsername(),user.getPassword());
-        if(validUser!=null){
-            System.out.println("Login attempt : " + user.getUsername());
-            return jwtUtil.generateToken(user.getUsername());
-        }else{
-            return "Invalid Credentials";
+    public Map<String,Object> login(
+            @RequestBody Users user){
+
+        Users validUser =
+                service.verifyUser(
+                        user.getUsername(),
+                        user.getPassword()
+                );
+
+        if(validUser != null){
+
+            String token =
+                    jwtUtil.generateToken(
+                            validUser.getUsername()
+                    );
+
+            Map<String,Object> response =
+                    new HashMap<>();
+
+            response.put(
+                    "token",
+                    token
+            );
+
+            response.put(
+                    "role",
+                    validUser.getRole()
+            );
+
+            return response;
         }
+
+        throw new RuntimeException(
+                "Invalid Credentials"
+        );
     }
 }

@@ -21,11 +21,15 @@ public class MyUserDetailsService implements UserDetailsService {
     if(user == null){
         throw new UsernameNotFoundException("User Not Found");
     }
-    return new User(
-            user.getUsername(),
-            user.getPassword(),
-            List.of( new SimpleGrantedAuthority("USER"))
-    );
+        return new User(
+                user.getUsername(),
+                user.getPassword(),
+                List.of(
+                        new SimpleGrantedAuthority(
+                                "ROLE_" + user.getRole()
+                        )
+                )
+        );
 
     }
 }
