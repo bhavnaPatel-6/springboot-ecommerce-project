@@ -26,6 +26,10 @@ public class Users {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public void setUserrname(String userrname) {
         this.username = userrname;
     }

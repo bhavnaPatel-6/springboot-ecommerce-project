@@ -26,7 +26,7 @@ public class MyUserDetailsService implements UserDetailsService {
                 user.getPassword(),
                 List.of(
                         new SimpleGrantedAuthority(
-                                "ROLE_" + user.getRole()
+                                "ROLE_"+ user.getRole()
                         )
                 )
         );

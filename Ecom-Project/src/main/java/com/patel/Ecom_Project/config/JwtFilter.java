@@ -72,5 +72,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+        System.out.println("Request Path = " + request.getServletPath());
+        System.out.println("Username = " + username);
     }
 }

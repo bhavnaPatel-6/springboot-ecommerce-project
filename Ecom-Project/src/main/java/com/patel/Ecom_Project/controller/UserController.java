@@ -29,7 +29,7 @@ public class UserController {
     public Map<String,Object> login(
             @RequestBody Users user){
 
-        Users validUser =
+               Users validUser =
                 service.verifyUser(
                         user.getUsername(),
                         user.getPassword()

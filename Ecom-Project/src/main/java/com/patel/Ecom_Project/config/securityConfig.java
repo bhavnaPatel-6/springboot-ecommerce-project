@@ -32,8 +32,7 @@ public class securityConfig {
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
-
-        return config.getAuthenticationManager();
+                    return config.getAuthenticationManager();
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception
@@ -41,25 +40,34 @@ public class securityConfig {
         return http.
                 csrf(csrf-> csrf.disable())
                 .cors(cors -> {})
-                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth->auth
-                        .requestMatchers(
+                .sessionManagement(
+                        session-> session.
+                                sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .authorizeHttpRequests(auth-> auth
+
+                                         .requestMatchers(
                                 "/api/auth/register",
-                                "/api/auth/login",
-                                "/uploads/**")
-                        .permitAll()
-                        .requestMatchers( "/api/product/**")
-                        .hasRole("ADMIN")
-                        .requestMatchers("/api/products/**")
-                        .hasAnyRole("ADMIN","USER")
-                        .anyRequest()
-                        .authenticated()
+                                          "/api/auth/login",
+                                                 "/uploads/**")
 
-                )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                                          .permitAll()
 
-    }
+                                         .requestMatchers( "/api/product/**")
+                                         .hasRole("ADMIN")
+
+                                         .requestMatchers("/api/products/**")
+                                         .hasAnyRole("ADMIN","USER")
+
+                                         .requestMatchers("/api/cart","/api/cart/**")
+                                         .hasAnyRole("USER","ADMIN")
+
+                                         .anyRequest()
+                                         .authenticated())
+
+                                         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                                         .build();
+
+                                           }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

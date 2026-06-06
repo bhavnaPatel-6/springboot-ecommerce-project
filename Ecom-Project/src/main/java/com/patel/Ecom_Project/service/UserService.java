@@ -22,9 +22,7 @@ public class UserService {
     }
 
     public Users verifyUser(String username, String password) {
-
         Users user = repo.findByUsername(username).orElse(null);
-
         if (user != null && encoder.matches(password, user.getPassword())) {
             return user;
         }
