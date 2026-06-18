@@ -38,19 +38,19 @@ public class securityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception
     {
         return http.
-                csrf(csrf-> csrf.disable())
-                .cors(cors -> {})
-                .sessionManagement(
+                  csrf(csrf-> csrf.disable())
+                 .cors(cors -> {})
+                 .sessionManagement(
                         session-> session.
                                 sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authorizeHttpRequests(auth-> auth
 
                                          .requestMatchers(
-                                "/api/auth/register",
-                                          "/api/auth/login",
+                                        "/api/auth/register",
+                                                 "/api/auth/login",
                                                  "/uploads/**")
 
-                                          .permitAll()
+                                         .permitAll()
 
                                          .requestMatchers( "/api/product/**")
                                          .hasRole("ADMIN")
@@ -61,16 +61,26 @@ public class securityConfig {
                                          .requestMatchers("/api/cart","/api/cart/**")
                                          .hasAnyRole("USER","ADMIN")
 
+                                         .requestMatchers("/api/cart/remove")
+                                         .hasAnyRole("USER","ADMIN")
+
+                                         .requestMatchers("/api/order/**")
+                                         .hasAnyRole("USER","ADMIN")
+
+                                         .requestMatchers("/api/order/**")
+                                         .hasAnyRole("USER","ADMIN")
+
                                          .anyRequest()
                                          .authenticated())
 
                                          .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                                          .build();
 
-                                           }
+                                         }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder(12);
     }
 }

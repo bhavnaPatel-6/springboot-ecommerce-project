@@ -14,7 +14,7 @@ public class Cart {
     @OneToOne
     private Users user;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems;
 
     public Integer getId() {

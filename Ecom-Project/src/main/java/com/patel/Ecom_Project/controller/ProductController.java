@@ -82,4 +82,9 @@ public ResponseEntity<String> updateProduct(@PathVariable int id, @RequestBody P
                     .body("Upload failed");
         }
     }
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<Product>> getProductsByCategory(
+            @PathVariable String category){
+        return ResponseEntity.ok(service.getProductsByCategory(category));
+    }
 }

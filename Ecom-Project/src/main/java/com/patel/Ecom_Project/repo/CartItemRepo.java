@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CartItemRepo extends JpaRepository<CartItem, CriteriaBuilder.In> {
+public interface CartItemRepo extends JpaRepository<CartItem, Integer> {
     List<CartItem> findByCart(Cart cart);
 
 Optional<CartItem>findByCartAndProduct(Cart cart, Product product);

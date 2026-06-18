@@ -16,7 +16,7 @@ public class UserService {
     //user hi admin banyega database se but database ka access ahr kisi k pass nhi hoga
     public Users registerrUser(Users user) {
         user.setPassword(encoder.encode(user.getPassword()));
-       user.setRole("USER");
+        user.setRole("USER");
 
         return repo.save(user);
     }

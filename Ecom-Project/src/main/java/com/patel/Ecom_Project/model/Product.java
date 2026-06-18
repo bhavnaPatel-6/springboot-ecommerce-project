@@ -32,6 +32,14 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
     public void setId(Integer id){
         this.id=id;
 
