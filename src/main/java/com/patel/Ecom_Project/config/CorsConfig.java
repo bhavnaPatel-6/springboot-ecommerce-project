@@ -16,10 +16,9 @@ public class CorsConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        // ✅ FRONTEND URL (Vercel)
         config.setAllowedOrigins(List.of(
                 "http://127.0.0.1:5500",
-                "https://ecommerce-product-hub.vercel.app"));
+                "https://producthub-nu.vercel.app"));
 
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
