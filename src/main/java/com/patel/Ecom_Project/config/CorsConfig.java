@@ -18,7 +18,7 @@ public class CorsConfig {
 
         config.setAllowedOrigins(List.of(
                 "http://127.0.0.1:5500",
-                "https://producthub-nu.vercel.app"));
+                "https://ecommerce-product-hub.vercel.app"));
 
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
