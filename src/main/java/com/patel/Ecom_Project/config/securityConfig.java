@@ -43,15 +43,23 @@ public class securityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(request -> {
-                    CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(
-                            "https://tumhara-frontend-url.onrender.com"));
 
-                    config.setAllowedMethods(List.of("*"));
+                    CorsConfiguration config = new CorsConfiguration();
+
+                    config.setAllowedOrigins(List.of(
+                            "https://ecommerce-product-hub.vercel.app"));
+
+                    config.setAllowedMethods(List.of(
+                            "GET",
+                            "POST",
+                            "PUT",
+                            "DELETE",
+                            "OPTIONS"));
 
                     config.setAllowedHeaders(List.of("*"));
 
                     config.setAllowCredentials(true);
+
                     return config;
                 }))
                 .sessionManagement(
