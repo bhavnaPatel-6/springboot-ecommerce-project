@@ -46,8 +46,8 @@ public class securityConfig {
 
                     CorsConfiguration config = new CorsConfiguration();
 
-                    config.setAllowedOrigins(List.of(
-                            "https://ecommerce-product-hub.vercel.app"));
+                    config.setAllowedOriginPatterns(List.of(
+                            "https://*.vercel.app"));
 
                     config.setAllowedMethods(List.of(
                             "GET",
@@ -62,6 +62,7 @@ public class securityConfig {
 
                     return config;
                 }))
+
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
