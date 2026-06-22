@@ -44,9 +44,14 @@ public class securityConfig {
         return http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOriginPatterns(List.of("*"));
+                    config.setAllowedOrigins(List.of(
+                            "https://tumhara-frontend-url.onrender.com"));
+
                     config.setAllowedMethods(List.of("*"));
+
                     config.setAllowedHeaders(List.of("*"));
+
+                    config.setAllowCredentials(true);
                     return config;
                 }))
                 .sessionManagement(
