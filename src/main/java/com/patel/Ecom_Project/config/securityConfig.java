@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import java.util.List;
 
 @Configuration
 
@@ -22,61 +24,67 @@ public class securityConfig {
     private JwtFilter jwtFilter;
     @Autowired
     private UserDetailsService userDetailsService;
+
     @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider provider=new DaoAuthenticationProvider(userDetailsService);
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
 
     }
+
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
-                    return config.getAuthenticationManager();
+        return config.getAuthenticationManager();
     }
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception
-    {
-        return http.
-                  csrf(csrf-> csrf.disable())
-                 .cors(cors -> {})
-                 .sessionManagement(
-                        session-> session.
-                                sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                                .authorizeHttpRequests(auth-> auth
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http.csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOriginPatterns(List.of("*"));
+                    config.setAllowedMethods(List.of("*"));
+                    config.setAllowedHeaders(List.of("*"));
+                    return config;
+                }))
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
 
-                                         .requestMatchers(
-                                        "/api/auth/register",
-                                                 "/api/auth/login",
-                                                 "/uploads/**")
+                        .requestMatchers(
+                                "/api/auth/register",
+                                "/api/auth/login",
+                                "/uploads/**")
 
-                                         .permitAll()
+                        .permitAll()
 
-                                         .requestMatchers( "/api/product/**")
-                                         .hasRole("ADMIN")
+                        .requestMatchers("/api/product/**")
+                        .hasRole("ADMIN")
 
-                                         .requestMatchers("/api/products/**")
-                                         .hasAnyRole("ADMIN","USER")
+                        .requestMatchers("/api/products/**")
+                        .hasAnyRole("ADMIN", "USER")
 
-                                         .requestMatchers("/api/cart","/api/cart/**")
-                                         .hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/api/cart", "/api/cart/**")
+                        .hasAnyRole("USER", "ADMIN")
 
-                                         .requestMatchers("/api/cart/remove")
-                                         .hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/api/cart/remove")
+                        .hasAnyRole("USER", "ADMIN")
 
-                                         .requestMatchers("/api/order/**")
-                                         .hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/api/order/**")
+                        .hasAnyRole("USER", "ADMIN")
 
-                                         .requestMatchers("/api/order/**")
-                                         .hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/api/order/**")
+                        .hasAnyRole("USER", "ADMIN")
 
-                                         .anyRequest()
-                                         .authenticated())
+                        .anyRequest()
+                        .authenticated())
 
-                                         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                                         .build();
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
 
-                                         }
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

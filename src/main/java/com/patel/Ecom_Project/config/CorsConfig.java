@@ -16,16 +16,12 @@ public class CorsConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOriginPatterns(List.of("*"));
-
+        config.setAllowedOriginPatterns(List.of("*")); // important
         config.addAllowedHeader("*");
-
         config.addAllowedMethod("*");
-
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
         source.registerCorsConfiguration("/**", config);
 
         return new CorsFilter(source);
