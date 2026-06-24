@@ -16,7 +16,9 @@ public class CorsConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOriginPatterns("https://ecommerce-product-hub.vercel.app")); // important
+        config.setAllowedOrigins(List.of(
+                "https://ecommerce-product-hub.vercel.app"));
+
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);
