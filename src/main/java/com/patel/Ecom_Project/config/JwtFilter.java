@@ -29,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain)
             throws ServletException, IOException {
-        String path = request.getServletPath();
+        String path = request.getRequestURI();
 
         if (path.startsWith("/api/auth/")) {
             filterChain.doFilter(request, response);
@@ -68,7 +68,5 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
-        System.out.println("Request Path = " + request.getServletPath());
-        System.out.println("Username = " + username);
     }
 }

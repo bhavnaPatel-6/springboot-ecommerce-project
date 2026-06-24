@@ -20,89 +20,94 @@ import java.util.List;
 @Configuration
 
 public class securityConfig {
-    @Autowired
-    private JwtFilter jwtFilter;
-    @Autowired
-    private UserDetailsService userDetailsService;
+        @Autowired
+        private JwtFilter jwtFilter;
+        @Autowired
+        private UserDetailsService userDetailsService;
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
+        @Bean
+        public AuthenticationProvider authenticationProvider() {
 
-    }
+                DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
+                provider.setUserDetailsService(userDetailsService);
+                provider.setPasswordEncoder(passwordEncoder());
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(request -> {
+                return provider;
+        }
 
-                    CorsConfiguration config = new CorsConfiguration();
+        @Bean
+        public AuthenticationManager authenticationManager(
+                        AuthenticationConfiguration config) throws Exception {
+                return config.getAuthenticationManager();
+        }
 
-                    config.setAllowedOriginPatterns(List.of(
-                            "https://*.vercel.app"));
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                return http.csrf(csrf -> csrf.disable())
+                                .cors(cors -> cors.configurationSource(request -> {
 
-                    config.setAllowedMethods(List.of(
-                            "GET",
-                            "POST",
-                            "PUT",
-                            "DELETE",
-                            "OPTIONS"));
+                                        CorsConfiguration config = new CorsConfiguration();
 
-                    config.setAllowedHeaders(List.of("*"));
+                                        config.setAllowedOriginPatterns(List.of(
+                                                        "https://*.vercel.app"));
 
-                    config.setAllowCredentials(true);
+                                        config.setAllowedMethods(List.of(
+                                                        "GET",
+                                                        "POST",
+                                                        "PUT",
+                                                        "DELETE",
+                                                        "OPTIONS"));
 
-                    return config;
-                }))
+                                        config.setAllowedHeaders(List.of("*"));
 
-                .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
+                                        config.setAllowCredentials(true);
 
-                        .requestMatchers(
-                                "/api/auth/register",
-                                "/api/auth/login",
-                                "/uploads/**")
+                                        return config;
+                                }))
 
-                        .permitAll()
+                                .sessionManagement(
+                                                session -> session
+                                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                        .requestMatchers("/api/product/**")
-                        .hasRole("ADMIN")
+                                .authenticationProvider(authenticationProvider()).authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/api/products/**")
-                        .hasAnyRole("ADMIN", "USER")
+                                                .requestMatchers(
+                                                                "/api/auth/register",
+                                                                "/api/auth/login",
+                                                                "/uploads/**")
 
-                        .requestMatchers("/api/cart", "/api/cart/**")
-                        .hasAnyRole("USER", "ADMIN")
+                                                .permitAll()
 
-                        .requestMatchers("/api/cart/remove")
-                        .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers("/api/product/**")
+                                                .hasRole("ADMIN")
 
-                        .requestMatchers("/api/order/**")
-                        .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers("/api/products/**")
+                                                .hasAnyRole("ADMIN", "USER")
 
-                        .requestMatchers("/api/order/**")
-                        .hasAnyRole("USER", "ADMIN")
+                                                .requestMatchers("/api/cart", "/api/cart/**")
+                                                .hasAnyRole("USER", "ADMIN")
 
-                        .anyRequest()
-                        .authenticated())
+                                                .requestMatchers("/api/cart/remove")
+                                                .hasAnyRole("USER", "ADMIN")
 
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                                                .requestMatchers("/api/order/**")
+                                                .hasAnyRole("USER", "ADMIN")
 
-    }
+                                                .requestMatchers("/api/order/**")
+                                                .hasAnyRole("USER", "ADMIN")
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
+                                                .anyRequest()
+                                                .authenticated())
 
-        return new BCryptPasswordEncoder(12);
-    }
+                                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                                .build();
+
+        }
+
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+
+                return new BCryptPasswordEncoder(12);
+        }
 }
