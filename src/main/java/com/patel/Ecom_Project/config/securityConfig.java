@@ -100,7 +100,7 @@ public class securityConfig {
                                                 .anyRequest()
                                                 .authenticated())
 
-                                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                                // .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                                 .build();
 
         }

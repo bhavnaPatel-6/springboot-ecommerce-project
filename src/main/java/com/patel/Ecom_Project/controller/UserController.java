@@ -28,7 +28,7 @@ public class UserController {
         @PostMapping("/login")
         public Map<String, Object> login(
                         @RequestBody Users user) {
-                System.out.println("LOGIN API HIT");
+                System.out.println("===== LOGIN HIT =====");
                 Users validUser = service.verifyUser(
                                 user.getUsername(),
                                 user.getPassword());

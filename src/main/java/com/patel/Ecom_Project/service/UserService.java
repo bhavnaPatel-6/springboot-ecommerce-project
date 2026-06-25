@@ -13,8 +13,12 @@ public class UserService {
     private UserRepo repo;
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-    //user hi admin banyega database se but database ka access ahr kisi k pass nhi hoga
+    // user hi admin banyega database se but database ka access ahr kisi k pass nhi
+    // hoga
     public Users registerrUser(Users user) {
+        if (repo.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
         user.setPassword(encoder.encode(user.getPassword()));
         user.setRole("USER");
 
