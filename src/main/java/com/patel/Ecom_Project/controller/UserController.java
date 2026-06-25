@@ -14,52 +14,44 @@ import java.util.Map;
 @CrossOrigin("*")
 
 public class UserController {
-    @Autowired
-    private UserService service;
+        @Autowired
+        private UserService service;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+        @Autowired
+        private JwtUtil jwtUtil;
 
-    @PostMapping("/register")
-    public Users register(@RequestBody Users user){
-        return service.registerrUser(user);
-    }
-
-    @PostMapping("/login")
-    public Map<String,Object> login(
-            @RequestBody Users user){
-
-               Users validUser =
-                service.verifyUser(
-                        user.getUsername(),
-                        user.getPassword()
-                );
-
-        if(validUser != null){
-
-            String token =
-                    jwtUtil.generateToken(
-                            validUser.getUsername()
-                    );
-
-            Map<String,Object> response =
-                    new HashMap<>();
-
-            response.put(
-                    "token",
-                    token
-            );
-
-            response.put(
-                    "role",
-                    validUser.getRole()
-            );
-
-            return response;
+        @PostMapping("/register")
+        public Users register(@RequestBody Users user) {
+                return service.registerrUser(user);
         }
 
-        throw new RuntimeException(
-                "Invalid Credentials"
-        );
-    }
+        @PostMapping("/login")
+        public Map<String, Object> login(
+                        @RequestBody Users user) {
+                System.out.println("LOGIN API HIT");
+                Users validUser = service.verifyUser(
+                                user.getUsername(),
+                                user.getPassword());
+
+                if (validUser != null) {
+
+                        String token = jwtUtil.generateToken(
+                                        validUser.getUsername());
+
+                        Map<String, Object> response = new HashMap<>();
+
+                        response.put(
+                                        "token",
+                                        token);
+
+                        response.put(
+                                        "role",
+                                        validUser.getRole());
+
+                        return response;
+                }
+
+                throw new RuntimeException(
+                                "Invalid Credentials");
+        }
 }
