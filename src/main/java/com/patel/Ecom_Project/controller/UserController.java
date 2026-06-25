@@ -32,6 +32,7 @@ public class UserController {
                 Users validUser = service.verifyUser(
                                 user.getUsername(),
                                 user.getPassword());
+                System.out.println(validUser);
 
                 if (validUser != null) {
 

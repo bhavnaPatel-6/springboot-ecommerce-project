@@ -50,7 +50,7 @@ public class securityConfig {
                                         CorsConfiguration config = new CorsConfiguration();
 
                                         config.setAllowedOriginPatterns(List.of(
-                                                        "https://*.vercel.app"));
+                                                        "https://ecommerce-product-hub.vercel.app"));
 
                                         config.setAllowedMethods(List.of(
                                                         "GET",
